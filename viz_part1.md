@@ -33,7 +33,7 @@ weather_df =
     name = recode( # case_math / case_when
       id, 
       USW00094728 = "CentralPark_NY", 
-      USC00519397 = "Molokai_HI",
+      USW00022534 = "Molokai_HI",
       USS0023B17S = "Waterhole_WA"),
     tmin = tmin / 10,
     tmax = tmax / 10) |>
@@ -80,3 +80,73 @@ ggp_nyc_weather =
 ```
 
 ## Fancy plot
+
+``` r
+ggplot(weather_df, aes(x = tmin, y = tmax)) +
+  geom_point(aes(color = name), alpha = .3) +
+  geom_smooth(se = F)
+```
+
+    ## `geom_smooth()` using method = 'gam' and formula = 'y ~ s(x, bs = "cs")'
+
+    ## Warning: Removed 17 rows containing non-finite values (`stat_smooth()`).
+
+    ## Warning: Removed 17 rows containing missing values (`geom_point()`).
+
+![](viz_part1_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+
+Plot with facets
+
+``` r
+ggplot(weather_df, aes(x = tmin, y = tmax, color = name)) +
+  geom_point(alpha = .3) + 
+  geom_smooth() +
+  facet_grid(. ~ name)
+```
+
+    ## `geom_smooth()` using method = 'loess' and formula = 'y ~ x'
+
+    ## Warning: Removed 17 rows containing non-finite values (`stat_smooth()`).
+
+    ## Warning: Removed 17 rows containing missing values (`geom_point()`).
+
+![](viz_part1_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+
+let’s try a different plot. temps are boring
+
+``` r
+ggplot(weather_df, aes(x = date, y = tmax, color = name)) +
+  geom_point(aes(size = prcp), alpha = .3) +
+  geom_smooth() +
+  facet_grid(. ~ name)
+```
+
+    ## `geom_smooth()` using method = 'loess' and formula = 'y ~ x'
+
+    ## Warning: Removed 17 rows containing non-finite values (`stat_smooth()`).
+
+    ## Warning: Removed 19 rows containing missing values (`geom_point()`).
+
+![](viz_part1_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+
+try assigning a specific color. (Use the default colors for now.)
+
+``` r
+weather_df |>
+  filter(name == "CentralPark_NY") |> 
+  ggplot(aes(x = date, y = tmax)) +
+  geom_point(color = "blue")
+```
+
+![](viz_part1_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+
+``` r
+weather_df |>
+  filter(name != "CentralPark_NY") |> 
+  ggplot(aes(x = date, y = tmax, color = name)) +
+  geom_point(alpha = .7, size = .5)
+```
+
+    ## Warning: Removed 17 rows containing missing values (`geom_point()`).
+
+![](viz_part1_files/figure-gfm/unnamed-chunk-8-2.png)<!-- -->

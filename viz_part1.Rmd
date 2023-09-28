@@ -5,10 +5,16 @@ date: "`r Sys.Date()`"
 output: github_document
 ---
 
-```{r}
+```{r, echo = F, message = F}
 library(tidyverse)
 library(ggplot2)
 library(ggridges)
+
+knitr::opts_chunk$set(
+  fig.width = 6,
+  fig.asp = .6, # width / height
+  out.width = "90%"
+)
 ```
 
 ```{r}
@@ -140,5 +146,22 @@ ridge plot
 ```{r}
 ggplot(weather_df, aes(x = tmax, y = name)) +
   geom_density_ridges()
+```
+
+## saving and embedding plots
+
+```{r}
+ggp_weather = 
+  weather_df |>
+  ggplot(aes(x = tmin, y = tmax)) +
+  geom_point()
+
+ggsave("results/ggp_weather.pdf", ggp_weather)
+```
+
+change the size.
+
+```{r, fig.width = 6, fig.asp = .6}
+ggp_weather
 ```
 
